@@ -5,16 +5,20 @@ from time import sleep
 import requests
 import sys
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+from twisted.internet import task
+from twisted.internet import reactor
+
 import os
 # Local imports
 import constants as cfg
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+STATUS = ''
 
 
 def init():
     loginUrl = "https://10.0.101.1:8090/login.xml"
-
+    print 'hey!'
     r = requests.get(loginUrl, verify=False)
     if not workingConnection():
         sys.exit("End of script, no use able network found.")
@@ -25,6 +29,7 @@ def init():
         cfg.WRITE = True
     try:
         login(loginUrl, cfg.USERNAME, cfg.PASSWORD)
+        STATUS = 'NOT NONE :D'
         return True
     except:
         print 'well, that is wrong.. I guess,  whatever.'
@@ -97,6 +102,13 @@ def write(username, password):
 
 
 if __name__ == "__main__":
-    t = threading.Timer(60*cfg.MINUTES, init())
-    t.start()
-    print ('Timer started, interval is set to %s minutes.' % cfg.MINUTES)
+    interval = (60*cfg.MINUTES)
+    # interval = (6)  # Testing purposes.
+
+    l = task.LoopingCall(init)
+    l.start(interval)
+    reactor.run()
+
+    # After the timer stops working.
+    print ('Thanks for using me, and no, I won\'t report you :3')
+
