@@ -8,11 +8,17 @@ class Update:
             pass
         else:
             print 'Checking for updates...'
+            self.check_for_update()
 
-    def check_for_update(self):
-        r = requests.get()
+    @staticmethod
+    def check_for_update():
+        r = requests.get(cfg.VERSION_FILE)
+        return r.content
 
 
+if __name__ == "__main__":
+    update = Update.check_for_update()
+    print update
 
 
 

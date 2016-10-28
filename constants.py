@@ -9,3 +9,4 @@ MINUTES = 7
 SSID = 'D105A'
 RETRIEVE_SSID_COMMAND = 'iwgetid -r'
 UPDATES = True
+VERSION_FILE = 'https://raw.githubusercontent.com/Evert-Arends/ConnectClient/master/version.txt'
