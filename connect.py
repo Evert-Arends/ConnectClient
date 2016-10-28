@@ -15,7 +15,9 @@ from subprocess import check_output
 import os
 # Local imports
 import constants as cfg
+import update
 
+Update = update.Update()
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 STATUS = ''
 
@@ -31,6 +33,7 @@ def init():
         cfg.USERNAME = raw_input("Please enter your username: ")
         cfg.PASSWORD = raw_input("Please enter your password: ")
         cfg.WRITE = True
+
     try:
         login(loginUrl, cfg.USERNAME, cfg.PASSWORD)
         STATUS = 'NOT NONE :D'
@@ -116,6 +119,10 @@ def write(username, password):
 
 
 if __name__ == "__main__":
+    # Print welcome message.
+    print cfg.MESSAGE
+    # Check for update.
+    Update.check_for_update()
     interval = (60 * cfg.MINUTES)
     # interval = (6)  # Testing purposes.
     try:
@@ -129,4 +136,4 @@ if __name__ == "__main__":
     reactor.run()
 
     # After the timer stops working.
-    print ('Thanks for using me, and no, I won\'t report you :3')
+    print ('Bye!')
