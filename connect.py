@@ -18,12 +18,13 @@ import constants as cfg
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 STATUS = ''
+SSID = 'D105A'
 RETRIEVE_SSID_COMMAND = 'iwgetid -r'
 
 
 def init():
     loginUrl = "https://10.0.101.1:8090/login.xml"
-    print 'hey!'
+    print 'Initialising...'
     r = requests.get(loginUrl, verify=False)
     if not workingConnection():
         sys.exit("End of script, no use able network found.")
@@ -44,7 +45,7 @@ def init():
 def workingConnection(url='https://10.0.101.1:8090/httpclient.html', timeout=5, sslprotection=False):
     scanOutput = commands.getoutput(RETRIEVE_SSID_COMMAND)
     print scanOutput
-    if 'D105A' not in scanOutput:
+    if SSID not in scanOutput:
         print 'This seems to be the wrong SSID. Quitting now.'
         return False
 
