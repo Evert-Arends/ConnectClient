@@ -13,7 +13,17 @@ class Update:
     @staticmethod
     def check_for_update():
         r = requests.get(cfg.VERSION_FILE)
-        return r.content
+        print r.content
+        if len(r.content) >= 5:
+            print 'Repository seems down. Care to check?'
+        else:
+            version = int(r.content)
+            if version >= cfg.VERSION:
+                print 'Update available, check the repository to find out more.'
+                return True
+            else:
+                return False
+        return False
 
 
 if __name__ == "__main__":
