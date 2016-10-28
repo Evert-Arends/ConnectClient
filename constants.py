@@ -6,3 +6,6 @@ WRITE = False
 USERNAME = None
 PASSWORD = None
 MINUTES = 7
+SSID = 'D105A'
+RETRIEVE_SSID_COMMAND = 'iwgetid -r'
+UPDATES = True
