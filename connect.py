@@ -1,4 +1,7 @@
+#!/usr/bin/python
 # Wide imports
+import commands
+import subprocess
 import threading
 from time import sleep
 
@@ -7,6 +10,7 @@ import sys
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from twisted.internet import task
 from twisted.internet import reactor
+from subprocess import check_output
 
 import os
 # Local imports
@@ -14,6 +18,7 @@ import constants as cfg
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 STATUS = ''
+RETRIEVE_SSID_COMMAND = 'iwgetid -r'
 
 
 def init():
@@ -31,12 +36,18 @@ def init():
         login(loginUrl, cfg.USERNAME, cfg.PASSWORD)
         STATUS = 'NOT NONE :D'
         return True
-    except:
+    except requests.ConnectionError:
         print 'well, that is wrong.. I guess,  whatever.'
         return False
 
 
 def workingConnection(url='https://10.0.101.1:8090/httpclient.html', timeout=5, sslprotection=False):
+    scanOutput = commands.getoutput(RETRIEVE_SSID_COMMAND)
+    print scanOutput
+    if 'D105A' not in scanOutput:
+        print 'This seems to be the wrong SSID. Quitting now.'
+        return False
+
     try:
         _ = requests.get(url=url, timeout=timeout, verify=sslprotection)
         return True
@@ -47,7 +58,11 @@ def workingConnection(url='https://10.0.101.1:8090/httpclient.html', timeout=5, 
 
 # Sending post request to the login API
 def login(login_url, username, password):
-    r = requests.post(login_url, data={'mode': 191, 'username': username, 'password': password}, verify=False)
+    try:
+        r = requests.post(login_url, data={'mode': 191, 'username': username, 'password': password}, verify=False)
+    except requests.ConnectionError:
+        print 'error'
+        return False
     code = str(r.content)
     if not check_password(code):
         init()
@@ -102,13 +117,17 @@ def write(username, password):
 
 
 if __name__ == "__main__":
-    interval = (60*cfg.MINUTES)
+    interval = (60 * cfg.MINUTES)
     # interval = (6)  # Testing purposes.
-
-    l = task.LoopingCall(init)
-    l.start(interval)
+    try:
+        l = task.LoopingCall(init)
+        l.start(interval)
+        # interval = 6  # Testing purposes.
+        interval = (60 * cfg.MINUTES)
+    except requests.ConnectionError:
+        print 'Connection error, retrying in 3 seconds..'
+        interval = 3
     reactor.run()
 
     # After the timer stops working.
     print ('Thanks for using me, and no, I won\'t report you :3')
-
