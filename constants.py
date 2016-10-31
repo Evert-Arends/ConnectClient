@@ -10,7 +10,7 @@ SSID = 'D105A'
 RETRIEVE_SSID_COMMAND = 'iwgetid -r'
 UPDATES = True
 VERSION_FILE = 'https://raw.githubusercontent.com/Evert-Arends/ConnectClient/master/version.txt'
-VERSION = 1.2
+VERSION = 1.3
 MESSAGE = 'Welcome to the connection bot. I\'m currently at version {0}, and still supported by the original' \
           ' developer!'.format(VERSION)
 

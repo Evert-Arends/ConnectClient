@@ -121,8 +121,6 @@ def write(username, password):
 if __name__ == "__main__":
     # Print welcome message.
     print cfg.MESSAGE
-    # Check for update.
-    Update.check_for_update()
     interval = (60 * cfg.MINUTES)
     # interval = (6)  # Testing purposes.
     try:
@@ -133,6 +131,9 @@ if __name__ == "__main__":
     except requests.ConnectionError:
         print 'Connection error, retrying in 3 seconds..'
         interval = 3
+
+    # Check for update.
+    Update.check_for_update()
     reactor.run()
 
     # After the timer stops working.
